@@ -1,9 +1,9 @@
 from casefoam import CaseFoamStructure
-from casefoam.utility import mkRmCases, mkAllRunClean
+from casefoam.utility import mkRmCases, mkAllRunClean,mkAllSendToServer
 import shutil
 
 
-def mkCases(baseCase, caseStructure, caseData, hierarchy, writeDir=None):
+def mkCases(baseCase, caseStructure, caseData, hierarchy, writeDir=None,sendToServer=True):
     r"""Make OpenFOAM cases.
 
     Make OpenFOAM cases based on a base case. The structure and folder
@@ -112,6 +112,9 @@ def mkCases(baseCase, caseStructure, caseData, hierarchy, writeDir=None):
     if writeDir:
         mkRmCases(writeDir, caseStructure, isWriteDir=True)
         mkAllRunClean(writeDir)
-    else:
+    if sendToServer:
+        mkRmCases(writeDir, caseStructure, isWriteDir=True)
+        mkAllSendToServer(writeDir)
+    if not writeDir:
         mkRmCases(baseCase, caseStructure)
         mkAllRunClean(baseCase)
